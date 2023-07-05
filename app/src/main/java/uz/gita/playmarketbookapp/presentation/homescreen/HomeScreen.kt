@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.navigator.tab.*
 import uz.gita.playmarketbookapp.R
-import uz.gita.playmarketbookapp.presentation.homescreen.allbooks.AllBooks
+import uz.gita.playmarketbookapp.presentation.allbooks.AllBooks
 import uz.gita.playmarketbookapp.presentation.homescreen.homepage.HomePage
 import uz.gita.playmarketbookapp.presentation.homescreen.saved.Saved
 
@@ -45,10 +45,14 @@ class HomeScreen : AndroidScreen() {
                         CurrentTab()
                     }
                 },
-                        bottomBar = {
-                    NavigationBar(modifier = Modifier.height(70.dp)) {
+                bottomBar = {
+                    NavigationBar(
+                        modifier = Modifier.height(70.dp),
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ) {
                         TabNavigationItem(tab = HomePage())
-                        TabNavigationItem(tab = AllBooks())
+                        //TabNavigationItem(tab = AllBooks())
                         TabNavigationItem(tab = Saved())
                     }
                 }
@@ -65,6 +69,11 @@ class HomeScreen : AndroidScreen() {
         val tabNavigator = LocalTabNavigator.current
 
         NavigationBarItem(
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.White,
+                unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(0.4F)
+            ),
             selected = tabNavigator.current == tab,
             onClick = { tabNavigator.current = tab },
             icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) }

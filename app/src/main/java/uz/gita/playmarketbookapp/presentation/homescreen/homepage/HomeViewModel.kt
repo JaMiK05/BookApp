@@ -53,6 +53,12 @@ class HomeViewModel @Inject constructor(
                     direction.savedTo(intent.data)
                 }
             }
+
+            is HomeContract.Intent.AllBooks -> {
+                viewModelScope.launch {
+                    direction.bookSearch()
+                }
+            }
         }
     }
 }

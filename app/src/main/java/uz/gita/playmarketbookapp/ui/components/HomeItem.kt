@@ -50,7 +50,7 @@ fun getColor(): Color {
 private fun HmPrev() {
 
     val bookData = BookData(
-        name = "Alpomish",
+        name = "Alpomish ddkdkdkkkdkkkkddkdkkdkkk",
         bookUrl = "",
         coverUrl = "",
         owner = "I. M. Jamshidbek",
@@ -89,9 +89,7 @@ private fun HmPrev() {
 @Composable
 fun HomeItem(data: HomeItemData, onClick: ((book: BookData) -> Unit)? = null) {
 
-
     val myColor = Color.Black
-
 
     Column(modifier = Modifier.clickable {}) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -102,7 +100,6 @@ fun HomeItem(data: HomeItemData, onClick: ((book: BookData) -> Unit)? = null) {
                 fontWeight = FontWeight(900),
                 modifier = Modifier.padding(start = 25.dp, top = 20.dp, bottom = 20.dp)
             )
-
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -156,12 +153,11 @@ fun Item(book: BookData, onClick: ((book: BookData) -> Unit)? = null) {
                     .padding(10.dp),
                 colors = CardDefaults.cardColors(color)
             ) {
-
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(20.dp))
-                        .padding(4.dp),
+                        .padding(2.dp),
                     model = ImageRequest.Builder(LocalContext.current).data(book.coverUrl)
                         .crossfade(true).build(),
                     placeholder = painterResource(id = placeHolder),
@@ -169,14 +165,14 @@ fun Item(book: BookData, onClick: ((book: BookData) -> Unit)? = null) {
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                 )
-
             }
-
             Text(
                 text = book.name.uppercase(),
                 color = Color.Black,
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 maxLines = 2,
+                letterSpacing = TextUnit(2f, TextUnitType.Sp),
+                lineHeight = TextUnit(15f, TextUnitType.Sp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight(900),
                 modifier = Modifier.padding(top = 8.dp)

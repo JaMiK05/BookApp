@@ -10,4 +10,8 @@
     <color name="save_color">#E66464</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="status_bar_color">#429867</color>
+
+
 </resources>

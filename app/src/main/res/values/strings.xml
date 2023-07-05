@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Books</string>
+    <string name="saved_books">Saqlangan kitoblar</string>
+    <string name="explore_books">Kutubxona</string>
+    <string name="not_found">Not Found</string>
 </resources>

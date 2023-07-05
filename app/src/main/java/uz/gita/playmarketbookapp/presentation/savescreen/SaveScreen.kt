@@ -84,6 +84,7 @@ class SaveScreen constructor(private val book: BookData) : AndroidScreen() {
                     Spacer(modifier = Modifier.size(20.dp))
                     Image(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(70f))
                             .size(70.dp)
                             .padding(15.dp)
                             .clickable {
@@ -117,7 +118,9 @@ class SaveScreen constructor(private val book: BookData) : AndroidScreen() {
                             .fillMaxWidth()
                             .height(250.dp)
                             .padding(horizontal = 100.dp)
-                            .padding(top = 20.dp), shape = CardDefaults.elevatedShape, elevation = 12.dp
+                            .padding(top = 20.dp),
+                        shape = CardDefaults.elevatedShape,
+                        elevation = 12.dp
                     ) {
                         AsyncImage(
                             modifier = Modifier
@@ -234,10 +237,12 @@ class SaveScreen constructor(private val book: BookData) : AndroidScreen() {
                     modifier = Modifier
                         .weight(3f)
                         .height(50.dp), onClick = {
-                        if (book.save) {
-                            onEvenDispatcher(SaveScreenContract.Intent.ReadScreenTo(book))
-                        } else {
-                            onEvenDispatcher(SaveScreenContract.Intent.SaveToBook(book))
+                        if (uiState.value.progress == -1f || uiState.value.progress >= 100) {
+                            if (book.save) {
+                                onEvenDispatcher(SaveScreenContract.Intent.ReadScreenTo(book))
+                            } else {
+                                onEvenDispatcher(SaveScreenContract.Intent.SaveToBook(book))
+                            }
                         }
                     }, shape = CardDefaults.elevatedShape, border = BorderStroke(0.5.dp, Color.Gray)
                 ) {

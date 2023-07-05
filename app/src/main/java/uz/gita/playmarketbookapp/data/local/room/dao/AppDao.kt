@@ -1,6 +1,7 @@
 package uz.gita.playmarketbookapp.data.local.room.dao
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import uz.gita.playmarketbookapp.data.local.room.entity.BookEntity
 
 /**
@@ -13,7 +14,7 @@ interface AppDao {
     fun addBook(book: BookEntity)
 
     @Query("SELECT * FROM books")
-    fun getAllSaveBook(): List<BookEntity>
+    fun getAllSaveBook(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE name LIKE :name || '%'  ORDER BY UPPER(name) ASC")
     fun getBooks(name: String): List<BookEntity>

@@ -7,14 +7,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +47,7 @@ import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.flow.MutableStateFlow
 import uz.gita.playmarketbookapp.R
 import uz.gita.playmarketbookapp.ui.components.AllBooksItem
+import uz.gita.playmarketbookapp.ui.components.BookItem
 import uz.gita.playmarketbookapp.ui.components.Search
 import uz.gita.playmarketbookapp.ui.theme.PlayMarketBookAppTheme
 
@@ -53,7 +58,7 @@ class Saved : Tab {
     override val options: TabOptions
         @Composable get() {
             val title = "Saved"
-            val icon = rememberVectorPainter(image = Icons.Default.FavoriteBorder)
+            val icon = rememberVectorPainter(image = Icons.Filled.Favorite)
             return remember {
                 TabOptions(index = 2u, title, icon)
             }
@@ -79,40 +84,29 @@ class Saved : Tab {
 
 
             TopAppBar(
-                colors = TopAppBarDefaults.mediumTopAppBarColors(Color(context.getColor(R.color.toolbar))),
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    actionIconContentColor = Color.White
+                ),
                 title = {
                     Text(
-                        modifier = Modifier
-                            .padding(start = 20.dp),
-                        text = "Saqlangan kitoblar",
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight(700),
-                        fontStyle = FontStyle.Italic,
-                        fontFamily = FontFamily.Serif,
+                        modifier = Modifier,
+                        text = stringResource(id = R.string.saved_books),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White,
                     )
                 },
-                actions = {
-                    Image(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .padding(end = 10.dp)
-                            .clickable {
-                                onEvenDispatcher(SavedContract.Intent.UpdateData)
-                            },
-                        painter = painterResource(id = R.drawable.reload),
-                        contentDescription = null
-                    )
-                }
             )
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .padding(start = 12.dp, end = 12.dp, top = 16.dp)
             ) {
-                Search() { name ->
+                Search(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)) { name ->
                     onEvenDispatcher(SavedContract.Intent.GetSearchBooks(name))
                 }
             }
@@ -128,18 +122,31 @@ class Saved : Tab {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.empty_list),
-                        contentDescription = "Saqlangan kitoblar yoq"
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            modifier = Modifier
+                                .size(200.dp)
+                                .padding(bottom = 4.dp),
+                            painter = painterResource(id = R.drawable.empty_book),
+                            contentDescription = "Saqlangan kitoblar yoq"
+                        )
+                        Text(
+                            text = stringResource(id = R.string.not_found),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             } else {
 
                 LazyColumn(content = {
 
                     items(uiState.value.savedList) { book ->
-                        AllBooksItem(book = book) { readBook ->
-                            onEvenDispatcher(SavedContract.Intent.ReadScreenTo(readBook))
+//                        AllBooksItem(book = book) { readBook ->
+//                            onEvenDispatcher(SavedContract.Intent.ReadScreenTo(readBook))
+//                        }
+                        BookItem(book = book) {
+                            onEvenDispatcher(SavedContract.Intent.ReadScreenTo(book))
                         }
                     }
 

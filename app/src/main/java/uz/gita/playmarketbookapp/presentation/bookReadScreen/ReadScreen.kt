@@ -1,12 +1,15 @@
 package uz.gita.playmarketbookapp.presentation.bookReadScreen
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -14,9 +17,12 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.*
+import coil.request.ImageRequest
 import uz.gita.playmarketbookapp.R
 import uz.gita.playmarketbookapp.data.model.BookData
-import uz.gita.playmarketbookapp.presentation.savescreen.SaveScreenContract
 import uz.gita.playmarketbookapp.util.loadpdf.*
 
 /**
@@ -50,7 +56,8 @@ class ReadScreen constructor(val book: BookData) : AndroidScreen() {
                             .padding(15.dp)
                             .clickable {
                                 viewModel.onEventDispatcher(ReadBookContract.Intent.BackToScreen)
-                            },
+                            }
+                            .clip(CircleShape),
                         painter = painterResource(id = R.drawable.back_ios_24),
                         contentDescription = null
                     )
@@ -63,7 +70,6 @@ class ReadScreen constructor(val book: BookData) : AndroidScreen() {
                         fontSize = 18.sp,
                         fontStyle = FontStyle.Italic,
                         maxLines = 1,
-                        style = MaterialTheme.typography.body1
                     )
                 }
             }
@@ -101,6 +107,13 @@ class ReadScreen constructor(val book: BookData) : AndroidScreen() {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center
                 ) {
+                    GifImage(size = 100)
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 5.dp, horizontal = 30.dp),
+                        text = "Kitob yuklangunicha kutib turing iltimos!!!"
+                    )
                     LinearProgressIndicator(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -120,4 +133,31 @@ class ReadScreen constructor(val book: BookData) : AndroidScreen() {
         }
 
     }
+
+    @Composable
+    fun GifImage(
+        modifier: Modifier = Modifier,
+        size: Int = 50,
+    ) {
+        val context = LocalContext.current
+        val imageLoader = ImageLoader.Builder(context)
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
+        Image(
+            painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(context).data(data = R.drawable.run_mario).apply(block = {
+                    size(size)
+                }).build(), imageLoader = imageLoader
+            ),
+            contentDescription = null,
+            modifier = modifier.fillMaxWidth(),
+        )
+    }
+
 }

@@ -86,35 +86,6 @@ fun PdfViewer(
     }
 }
 
-/*
-@ExperimentalFoundationApi
-@Composable
-fun PdfViewer(
-    @RawRes pdfResId: Int,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color(0xFF909090),
-    listDirection: PdfListDirection = PdfListDirection.VERTICAL,
-    arrangement: Arrangement.HorizontalOrVertical = Arrangement.spacedBy(16.dp),
-    loadingListener: (
-        isLoading: Boolean,
-        currentPage: Int?,
-        maxPage: Int?,
-    ) -> Unit = { _, _, _ -> },
-    page: @Composable (LazyListState, ImageBitmap) -> Unit
-) {
-    val context = LocalContext.current
-    PdfViewer(
-        pdfStream = context.resources.openRawResource(pdfResId),
-        modifier = modifier,
-        backgroundColor = backgroundColor,
-        listDirection = listDirection,
-        arrangement = arrangement,
-        loadingListener = loadingListener,
-        page = page
-    )
-}
-*/
-
 @ExperimentalFoundationApi
 @Composable
 fun PdfViewer(

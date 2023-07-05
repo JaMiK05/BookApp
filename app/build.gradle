@@ -111,7 +111,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 
-    implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation 'androidx.compose.material:material:<compose_version>'
 
@@ -119,8 +118,12 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.2'
     kapt "androidx.room:room-compiler:2.4.2"
 
-
+    //materil icon ucn
     implementation 'com.google.android.material:material:1.4.0'
+
+    //gif view in compose
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation "io.coil-kt:coil-gif:2.4.0"
 
 
 }

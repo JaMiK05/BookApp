@@ -1,6 +1,7 @@
 package uz.gita.playmarketbookapp.presentation.homescreen
 
 import uz.gita.playmarketbookapp.data.model.BookData
+import uz.gita.playmarketbookapp.presentation.allbooks.AllBooks
 import uz.gita.playmarketbookapp.presentation.savescreen.SaveScreen
 import uz.gita.playmarketbookapp.util.navigation.AppNavigator
 import javax.inject.Inject
@@ -10,6 +11,8 @@ import javax.inject.Inject
  **/
 interface HomeDirection {
     suspend fun savedTo(bookData: BookData)
+
+    suspend fun bookSearch()
 }
 
 class HomeDirectionImpl @Inject constructor(
@@ -18,4 +21,9 @@ class HomeDirectionImpl @Inject constructor(
     override suspend fun savedTo(bookData: BookData) {
         navigator.navigateTo(SaveScreen(bookData))
     }
+
+    override suspend fun bookSearch() {
+        navigator.navigateTo(AllBooks())
+    }
+
 }

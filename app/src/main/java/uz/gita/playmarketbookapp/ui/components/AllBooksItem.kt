@@ -5,7 +5,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -24,7 +24,6 @@ import uz.gita.playmarketbookapp.ui.theme.PlayMarketBookAppTheme
 /**
  *   Created by Jamik on 6/25/2023 ot 3:13 PM
  **/
-
 
 private val listPlaceHolder = ArrayList<Int>()
 private val listError = ArrayList<Int>()
@@ -51,17 +50,6 @@ fun getError(): Int {
     }
     listError.shuffle()
     return listError[0]
-}
-
-private fun getColorr(contex: Context): Color {
-
-    if (listColor.isEmpty()) {
-        listColor.add(Color.Green)
-        listColor.add(Color.LightGray)
-        listColor.add(Color(contex.getColor(R.color.teal_200)))
-    }
-    listColor.shuffle()
-    return listColor[0]
 }
 
 
@@ -130,7 +118,7 @@ fun AllBooksItem(book: BookData, onClick: ((book: BookData) -> Unit)? = null) {
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(20.dp))
-                        .padding(4.dp),
+                        .padding(2.dp),
                     model = ImageRequest.Builder(LocalContext.current).data(book.coverUrl)
                         .crossfade(true).build(),
                     placeholder = painterResource(id = placeHolder),
@@ -168,13 +156,12 @@ fun AllBooksItem(book: BookData, onClick: ((book: BookData) -> Unit)? = null) {
                 Text(
                     text = book.description,
                     color = Color.DarkGray,
-                    fontSize = 7.sp,
+                    fontSize = 5.sp,
+                    lineHeight = TextUnit(10f, TextUnitType.Sp),
                     fontWeight = FontWeight(700),
                     modifier = Modifier.padding(top = 8.dp, end = 25.dp)
                 )
-
             }
-
         }
     }
 }

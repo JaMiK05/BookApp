@@ -10,6 +10,7 @@ interface HomeContract {
 
     sealed interface Intent {
         class ReadBook(val data: BookData) : Intent
+        object AllBooks : Intent
     }
 
     data class UiState(

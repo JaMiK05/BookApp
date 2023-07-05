@@ -19,7 +19,7 @@ interface SaveScreenContract {
 
     data class UiState(
         val showOrHide: Boolean = false,
-        val progress: Float = 0f,
+        val progress: Float = -1f,
     )
 
 

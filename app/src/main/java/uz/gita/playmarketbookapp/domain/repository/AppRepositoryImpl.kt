@@ -5,12 +5,16 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import uz.gita.playmarketbookapp.data.local.room.dao.AppDao
 import uz.gita.playmarketbookapp.data.model.BookData
@@ -26,6 +30,7 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
 
     private val firestore = Firebase.firestore
     private val storage = Firebase.storage.reference
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     @Inject
     lateinit var dao: AppDao
@@ -167,14 +172,16 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
         }
     }
 
-    override fun getBooksDatabase(): Flow<List<BookData>> = flow {
-        val list = dao.getAllSaveBook()
-        val result = ArrayList<BookData>()
-        list.forEach {
-            result.add(it.bookEntityToBookData())
-        }
-        emit(result)
-    }.flowOn(Dispatchers.IO)
+    override fun getBooksDatabase(): Flow<List<BookData>> = callbackFlow {
+        dao.getAllSaveBook().onEach { list ->
+            val result = ArrayList<BookData>()
+            list.forEach {
+                result.add(it.bookEntityToBookData())
+            }
+            trySend(result)
+        }.launchIn(scope)
+        awaitClose()
+    }
 
     override fun getDatabaseSearchBook(name: String): Flow<List<BookData>> = flow {
         val list = dao.getBooks(name)

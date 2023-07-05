@@ -2,18 +2,22 @@ package uz.gita.playmarketbookapp.presentation.homescreen.homepage
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +29,9 @@ import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import uz.gita.playmarketbookapp.R
+import uz.gita.playmarketbookapp.presentation.allbooks.AllBooksContract
 import uz.gita.playmarketbookapp.ui.components.HomeItem
+import uz.gita.playmarketbookapp.ui.components.Search
 import uz.gita.playmarketbookapp.ui.theme.PlayMarketBookAppTheme
 
 /**
@@ -34,15 +40,13 @@ import uz.gita.playmarketbookapp.ui.theme.PlayMarketBookAppTheme
 class HomePage : Tab {
     override val options: TabOptions
         @Composable get() {
-
             val title = "Home"
-            val icon = rememberVectorPainter(image = Icons.Default.Home)
+            val icon = rememberVectorPainter(image = Icons.Filled.Home)
             return remember {
                 TabOptions(
                     index = 0u, title, icon
                 )
             }
-
         }
 
     @Composable
@@ -60,62 +64,51 @@ class HomePage : Tab {
         onEvenDispatcher: (HomeContract.Intent) -> Unit,
     ) {
         val context = LocalContext.current
-        var showMenu by remember { mutableStateOf(false) }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
             //      .background(Brush.verticalGradient(arrayListOf(Color.Green, Color.Blue))),
         ) {
-            TopAppBar(
-                colors = TopAppBarDefaults.mediumTopAppBarColors(Color(context.getColor(R.color.toolbar))),
+            TopAppBar(colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary
+            ),
                 title = {
                     Text(
-                        modifier = Modifier
-                            .padding(start = 20.dp),
-                        text = "Kutubxona",
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight(700),
-                        fontStyle = FontStyle.Italic,
-                        fontFamily = FontFamily.Serif,
+                        modifier  = Modifier,
+                        text = stringResource(id = R.string.explore_books),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White,
                     )
                 },
-                actions = {
+                actions = {})
 
-                    /*   IconButton(onClick = { showMenu = !showMenu }) {
-                           Icon(
-                               painter = painterResource(id = R.drawable.more1),
-                               "",
-                               modifier = Modifier.size(30.dp)
-                           )
-                       }
-
-                       DropdownMenu(
-                           expanded = showMenu,
-                           onDismissRequest = { showMenu = false }
-                       ) {
-
-                           DropdownMenuItem(
-                               text = {
-                                   Text(text = "Setings")
-                               },
-                               onClick = {
-                                   Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
-                               })
-                           DropdownMenuItem(
-                               text = {
-                                   Text(text = "Log out")
-                               },
-                               onClick = {
-                                   Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
-                               })
-
-                       }
-   */
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+            ) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                onEvenDispatcher(HomeContract.Intent.AllBooks)
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = "Search", color = Color.Gray)
+                    }
                 }
-            )
+            }
 
             LazyColumn(content = {
 
@@ -146,8 +139,7 @@ class HomePage : Tab {
 
         PlayMarketBookAppTheme() {
             Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
+                modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
             ) {
                 HomeContent(uiState = uiState, onEvenDispatcher = {})
             }
